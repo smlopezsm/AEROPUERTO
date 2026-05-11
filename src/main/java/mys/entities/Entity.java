@@ -1,4 +1,4 @@
-package mys;
+package entities;
 
 public class Entity {
 
@@ -26,4 +26,6 @@ public class Entity {
     public void server(Server server) {
         this.server = server;
     }
+
+
 }
