@@ -1,6 +1,7 @@
-package mys;
+package mys.policies;
 
 import java.util.List;
+import mys.resources.*;
 
 public class OneServer implements ServerSelectionPolicy {
 
@@ -8,4 +9,7 @@ public class OneServer implements ServerSelectionPolicy {
     public Server selectServer(List<Server> servers) {
         return servers.get(0);
     }
+
+    //Hacer la politica para varios servidores
+    
 }

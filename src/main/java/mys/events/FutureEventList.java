@@ -1,11 +1,11 @@
-package mys;
+package mys.events;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class FutureEventList{
-    private List<Event> events; //No existe la clase Event!!!, estamos haciendo una lista de interfaces
+    private List<Event> events; 
     private Comparator<Event> comparator;
 
     public FutureEventList() {

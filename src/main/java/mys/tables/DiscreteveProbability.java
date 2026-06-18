@@ -1,4 +1,4 @@
-package tables;
+package mys.tables;
 
 @FunctionalInterface
 public interface DiscreteveProbability {

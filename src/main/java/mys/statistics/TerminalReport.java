@@ -1,5 +1,6 @@
-package mys;
+package mys.statistics;
 
+import mys.events.Statistics;
 public class TerminalReport implements ReportManager {
 
     @Override

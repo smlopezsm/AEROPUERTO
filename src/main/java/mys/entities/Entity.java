@@ -1,4 +1,5 @@
-package entities;
+package mys.entities;
+import mys.resources.Server;
 
 public class Entity {
 

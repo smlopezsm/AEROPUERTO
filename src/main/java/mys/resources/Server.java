@@ -1,5 +1,6 @@
-package mys;
+package mys.resources;
 
+import mys.entities.Entity;
 import java.util.Queue;
 
 public class Server {

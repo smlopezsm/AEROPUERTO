@@ -1,8 +1,10 @@
-package mys;
+package mys.events;
 
 import mys.generators.Distribution;
-
+import mys.resources.*;
+import mys.entities.Entity;
 import java.util.List;
+
 
 public class Arrival implements Event {
 
@@ -11,7 +13,6 @@ public class Arrival implements Event {
     private final Entity entity;
     private final ServerSelectionPolicy serverSelectionPolicy;
     private final Distribution arrivalDistribution;
-
     private final Distribution serviceDistribution;
 
     public Arrival(double clock, Entity entity, Distribution arrivalDistribution,

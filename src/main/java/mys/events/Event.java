@@ -1,8 +1,8 @@
-package mys;
-
-import java.util.List;
-
+package mys.events;
+import mys.entities.Entity;
 import mys.generators.Distribution;
+import java.util.List;
+import mys.resources.Server;
 
 public interface Event {
 

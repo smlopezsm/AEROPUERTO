@@ -1,8 +1,9 @@
-package mys;
+package mys.events;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import mys.resources.Server;
 
 public class Statistics {
 

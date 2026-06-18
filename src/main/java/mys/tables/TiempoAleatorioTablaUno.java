@@ -1,4 +1,4 @@
-package tables;
+package mys.tables;
 
 import java.util.Random;
 

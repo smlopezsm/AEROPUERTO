@@ -1,4 +1,4 @@
-package mys;
+package mys.resources;
 
 import java.util.List;
 
