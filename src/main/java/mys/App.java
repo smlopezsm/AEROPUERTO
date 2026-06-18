@@ -3,11 +3,13 @@ package mys;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import mys.events.Statistics;
 import mys.policies.OneServer;
 import mys.resources.Server;
-import mys.generators.Constant;
 import mys.statistics.TerminalReport;
+import mys.tables.TiempoAleatorioTablaDos;
+import mys.tables.TiempoAleatorioTablaUno;
 public class App {
 
     private static final double SIMULATION_LENGTH = 40320;
@@ -32,8 +34,8 @@ public class App {
         Engine engine = new Engine(
                 SIMULATION_LENGTH,
                 servers,
-                new Constant(10),
-                new Constant(9),
+                new TiempoAleatorioTablaUno(),
+                new TiempoAleatorioTablaDos(),
                 new OneServer(),
                 new Statistics());
 

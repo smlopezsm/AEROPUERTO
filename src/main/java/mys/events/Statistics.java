@@ -3,18 +3,19 @@ package mys.events;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import mys.resources.Server;
 
 public class Statistics {
 
-    // private final double meanSystemTime;
+    private double meanSystemTime;
     private double meanWaitingTime;
 
     private double totalSystemTime = 0;
     private double totalWaitingTime = 0;
 
-    private Map<Integer, Double> serverTotalIdleTimes = new HashMap<>();
-    private Map<Integer, Double> serverInitIdleTimes = new HashMap<>();
+    private final Map<Integer, Double> serverTotalIdleTimes = new HashMap<>();
+    private final Map<Integer, Double> serverInitIdleTimes = new HashMap<>();
 
     private double maxSystemTime = 0;
     private double maxWaitingTime = 0;
@@ -25,9 +26,12 @@ public class Statistics {
     private int totalArrivals = 0;
     private int totalDepartures = 0;
 
-    void registerServers(List<Server> servers) {
-        for (Server s : servers)
+    private int maxQueueLength = 0;
+
+    public void registerServers(List<Server> servers) {
+        for (Server s : servers){
             this.serverTotalIdleTimes.put(s.id(), 0d);
+            this.serverInitIdleTimes.put(s.id(), 0d);}
     }
 
     public double totalWaitingTime() {
@@ -61,6 +65,13 @@ public class Statistics {
     public double serverIdMaxIdleTime() {
         return this.serverIdMaxIdleTime;
     }
+    public double meanWaitingTime() {
+    return this.meanWaitingTime;
+    }
+
+    public double meanSystemTime() {
+    return this.meanSystemTime;
+   }
 
     /**
      * 
@@ -75,7 +86,7 @@ public class Statistics {
      * @return the max queue lenght registered
      */
     public int maxQueueLength() {
-        return 0;
+        return this.maxQueueLength;
     }
 
     /**
@@ -130,7 +141,14 @@ public class Statistics {
         this.totalDepartures++;
     }
 
+    public void registerQueueLength(int queueLength) {
+    if (queueLength > this.maxQueueLength) {
+        this.maxQueueLength = queueLength;
+    }
+    }
+
     public void calculate() {
         this.meanWaitingTime = this.totalWaitingTime/this.totalDepartures;
+        this.meanSystemTime = this.totalSystemTime/this.totalDepartures;
     }
 }

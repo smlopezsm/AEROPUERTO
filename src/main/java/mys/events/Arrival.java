@@ -1,9 +1,11 @@
 package mys.events;
 
-import mys.generators.Distribution;
-import mys.resources.*;
-import mys.entities.Entity;
 import java.util.List;
+
+import mys.entities.Entity;
+import mys.generators.Distribution;
+import mys.resources.Server;
+import mys.resources.ServerSelectionPolicy;
 
 
 public class Arrival implements Event {
@@ -32,6 +34,7 @@ public class Arrival implements Event {
 
         if (server.isBusy()) {
             server.queue().add(this.entity());
+            statistics.registerQueueLength(server.queue().size());
         } else {
 
             server.entity(this.entity());

@@ -1,6 +1,7 @@
 package mys.events;
 
 import java.util.List;
+
 import mys.entities.Entity;
 import mys.generators.Distribution;
 import mys.resources.Server;
@@ -28,6 +29,7 @@ public class EndOfService implements Event {
 
             Entity nextEntity = server.queue().poll();
             server.entity(nextEntity);
+            nextEntity.server(server);
 
             double serviceTime = this.distribution.sample();
 
