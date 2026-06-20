@@ -16,15 +16,17 @@ public class Arrival implements Event {
     private final ServerSelectionPolicy serverSelectionPolicy;
     private final Distribution arrivalDistribution;
     private final Distribution serviceDistribution;
+    private final Distribution wearDistribution; 
 
     public Arrival(double clock, Entity entity, Distribution arrivalDistribution,
-            Distribution serviceDistribution,
+            Distribution serviceDistribution, Distribution wearDistribution,
             ServerSelectionPolicy serverSelectionPolicy) {
         this.clock = clock;
         this.entity = entity;
         this.serverSelectionPolicy = serverSelectionPolicy;
         this.arrivalDistribution = arrivalDistribution;
         this.serviceDistribution = serviceDistribution;
+        this.wearDistribution = wearDistribution; // ASIGNACIÓN
     }
 
     // Ver si se modifico para varios arribos a la vez
@@ -65,6 +67,7 @@ public class Arrival implements Event {
                         new Entity(this.entity().id() + 1, nextArrivalTime),
                         this.arrivalDistribution,
                         this.serviceDistribution,
+                        this.wearDistribution, // SE ENVÍA AL PRÓXIMO ARRIBO
                         this.serverSelectionPolicy));
 
         statistics.entityArrived();
@@ -90,3 +93,5 @@ public class Arrival implements Event {
         return this.arrivalDistribution;
     }
 }
+
+

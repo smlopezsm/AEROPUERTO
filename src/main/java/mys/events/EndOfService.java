@@ -6,45 +6,76 @@ import mys.entities.Entity;
 import mys.generators.Distribution;
 import mys.resources.Server;
 
-
 public class EndOfService implements Event {
 
     private final double clock;
-    private final int order = 200;
+    private final int order = 0; // Prioridad más alta que el Arrival (100) para procesar salidas primero en caso de empate de reloj
     private final Entity entity;
-    private final Distribution distribution;
+    private final Distribution serviceDistribution;
+    private final Distribution wearDistribution; // Se añade la distribución de desgaste
 
-    public EndOfService(double clock, Entity entity, Distribution distribution) {
+    // Constructor actualizado para recibir la distribución de desgaste
+    public EndOfService(double clock, Entity entity, Distribution serviceDistribution, Distribution wearDistribution) {
         this.clock = clock;
         this.entity = entity;
-        this.distribution = distribution;
+        this.serviceDistribution = serviceDistribution;
+        this.wearDistribution = wearDistribution;
     }
 
     @Override
     public void planificate(FutureEventList fel, List<Server> servers, Statistics statistics) {
+        
+        Server server = this.entity().server();
+        
+        // --- Registro de Estadísticas de la Entidad que finaliza ---
+        // Aquí puedes calcular el tiempo de tránsito (tiempo total en el sistema)
+        // del avión que acaba de aterrizar y reportarlo a statistics.
+        // statistics.addTransitTime(this.clock - this.entity().arrivalTime());
+        
+        // 1. Calculamos y aplicamos el desgaste a la pista
+        double wearAmount = this.wearDistribution.sample();
+        server.decreaseDurability(wearAmount);
+        
+        // 2. Liberamos el servidor del avión que acaba de aterrizar
+        server.entity(null);
+        this.entity().server(null);
+        
+        // =================================================================
+        // LÓGICA DE LÍMITE DE ESPERA (2 HORAS = 120 MINUTOS)
+        // =================================================================
+        boolean planeAssigned = false;
 
-        Server server = this.entity.server();
-
-        if (server.queue().size() > 0) {
-
-            Entity nextEntity = server.queue().poll();
-            server.entity(nextEntity);
-            nextEntity.server(server);
-
-            double serviceTime = this.distribution.sample();
-
-            fel.insert(new EndOfService(this.clock + serviceTime, nextEntity, this.distribution));
-
-            statistics.addWaitingTime(this.clock - nextEntity.arrivalTime());
-
-        } else {
-            server.entity(null);
-            statistics.initIdleTime(server.id(), this.clock);
+        // Recorremos la cola hasta encontrar un avión válido o vaciarla
+        while (!server.queue().isEmpty() && !planeAssigned) {
+            
+            Entity nextPlane = server.queue().poll();
+            
+            // Calculamos cuánto tiempo pasó este avión en la cola.
+            double waitTime = this.clock() - nextPlane.arrivalTime(); 
+            
+            if (waitTime <= 120.0) {
+                // El avión es válido (esperó 2 horas o menos). Entra a la pista.
+                server.entity(nextPlane);
+                nextPlane.server(server);
+                
+                // Registramos el tiempo de espera en las estadísticas antes de que inicie su servicio
+                statistics.addWaitTime(waitTime);
+                
+                // Planificamos su fin de servicio
+                fel.insert(new EndOfService(
+                        this.clock() + this.serviceDistribution.sample(), 
+                        nextPlane, 
+                        this.serviceDistribution, 
+                        this.wearDistribution));
+                
+                planeAssigned = true; // Cortamos el bucle while
+                
+            } else {
+                // El avión expiró. Superó los 120 minutos en la cola y se desvió a otro aeropuerto.
+                // Lo contamos en las estadísticas para tu reporte final.
+                statistics.addAbandonedEntity(); 
+            }
         }
-
-        statistics.entityDeparture();
-        statistics.addSystemTime(this.clock - this.entity.arrivalTime());
-
     }
 
     @Override
@@ -64,6 +95,6 @@ public class EndOfService implements Event {
 
     @Override
     public Distribution distribution() {
-        return this.distribution;
+        return this.serviceDistribution;
     }
 }

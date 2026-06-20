@@ -8,11 +8,13 @@ public class Server {
     private final int id;
     private final Queue<Entity> queue;
     private Entity entity;
+    private double durability; 
 
     public Server(int id, Queue<Entity> queue) {
         this.id = id;
         this.queue = queue;
         this.entity = null;
+        this.durability = 3000.0; // Valor inicial definido en el modelo
     }
 
     /**
@@ -45,5 +47,23 @@ public class Server {
      */
     public Queue<Entity> queue(){
         return this.queue;
+    }
+
+    /**
+     * Devuelve la durabilidad actual de la pista
+     */
+    public double getDurability() {
+        return this.durability;
+    }
+
+    /**
+     * Resta un valor a la durabilidad actual de la pista
+     * @param wearAmount La cantidad de desgaste a aplicar
+     */
+    public void decreaseDurability(double wearAmount) {
+        this.durability -= wearAmount;
+        if (this.durability < 0) {
+            this.durability = 0; // Para evitar durabilidad negativa si fuera el caso
+        }
     }
 }
