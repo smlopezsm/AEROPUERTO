@@ -45,3 +45,9 @@ public class App {
 
     }
 }
+/*
+    Nota sobre la inicialización: 
+    Cuando configures tu simulador en tu archivo App.java (o donde instancies el Engine), en 
+    lugar de pasar un new Exponential(15) como arrivalBehavior, 
+    simplemente pasarás new TimeDependentExponential(15.0, 9.0).
+*/

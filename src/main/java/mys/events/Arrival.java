@@ -4,9 +4,9 @@ import java.util.List;
 
 import mys.entities.Entity;
 import mys.generators.Distribution;
+import mys.generators.TimeDependentExponential;
 import mys.resources.Server;
 import mys.resources.ServerSelectionPolicy;
-
 
 public class Arrival implements Event {
 
@@ -27,6 +27,7 @@ public class Arrival implements Event {
         this.serviceDistribution = serviceDistribution;
     }
 
+    // Ver si se modifico para varios arribos a la vez
     @Override
     public void planificate(FutureEventList fel, List<Server> servers, Statistics statistics) {
 
@@ -49,7 +50,16 @@ public class Arrival implements Event {
                             this.serviceDistribution));
         }
 
+        // --- CÓDIGO NUEVO AGREGADO --- 
+        // Define como responde el trafico a las distribuciones exponenciales Etapa 2
+        // Inyectamos el reloj actual si la distribución es dependiente del tiempo
+        if (this.arrivalDistribution instanceof TimeDependentExponential) {
+            ((TimeDependentExponential) this.arrivalDistribution).setClock(this.clock);
+        }
+        // ------------------------------
+
         double nextArrivalTime = this.clock + this.arrivalDistribution.sample();
+        
         fel.insert(
                 new Arrival(nextArrivalTime,
                         new Entity(this.entity().id() + 1, nextArrivalTime),
