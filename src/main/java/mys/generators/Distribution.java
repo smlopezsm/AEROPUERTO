@@ -4,5 +4,3 @@ package mys.generators;
 public interface Distribution {
     double sample();
 }
-
-//falta decirle al manager que distribuon va a utilizar 
