@@ -12,6 +12,11 @@ public class TimeDependentExponential implements Distribution {
         this.peakTraffic = new Exponential(peakMedia);
     }
 
+    public TimeDependentExponential(double normalMedia, double peakMedia, long semilla) {
+        this.normalTraffic = new Exponential(normalMedia, semilla);
+        this.peakTraffic = new Exponential(peakMedia, semilla + 1);
+    }
+
     // Método para inyectar el tiempo actual antes de pedir el sample
     public void setClock(double clock) {
         this.currentClock = clock;

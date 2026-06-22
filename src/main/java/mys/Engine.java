@@ -35,6 +35,26 @@ public class Engine {
                 new Arrival(0, new Entity(0, 0), arrivalBehavior, serviceBehavior, serverSelectionPolicy));
     }
 
+    public Engine(
+            double simulationLenght,
+            List<Server> servers,
+            Distribution arrivalBehavior,
+            Distribution serviceBehavior,
+            Distribution wearBehavior, 
+            ServerSelectionPolicy serverSelectionPolicy,
+            Statistics statistics) {
+
+        this.simulationLenght = simulationLenght;
+        this.servers = servers;
+        this.statistics = statistics;
+        this.statistics.registerServers(servers);
+        this.fel = new FutureEventList();
+
+        // Se inyecta la distribución de desgaste al primer arribo
+        this.fel.insert(
+                new Arrival(0, new Entity(0, 0), arrivalBehavior, serviceBehavior, wearBehavior, serverSelectionPolicy));
+    }
+
     public Statistics statistics() {
         return this.statistics;
     }
@@ -46,7 +66,13 @@ public class Engine {
             e.planificate(this.fel, this.servers, this.statistics);
             e = this.fel.imminent();
         }
+        this.statistics.finishIdleTimes(
+        this.servers,
+        this.simulationLenght);
 
+        for(Server s : servers) {
+            statistics.durationsServers(s.getDurability());
+        }
         this.statistics.calculate();
     }
 }

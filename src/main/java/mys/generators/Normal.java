@@ -37,6 +37,11 @@ public class Normal implements Distribution {
         this.random.setSeed(semilla);
     }
 
+    public Normal(double media, double desviacion, boolean soloPositivos, long semilla) {
+        this(media, desviacion, soloPositivos);
+        this.random.setSeed(semilla);
+    }
+
     @Override
     public double sample() {
         // Java usa el algoritmo Box-Muller internamente en nextGaussian()

@@ -1,7 +1,8 @@
 package mys.resources;
 
-import mys.entities.Entity;
 import java.util.Queue;
+
+import mys.entities.Entity;
 
 public class Server {
 
@@ -62,8 +63,5 @@ public class Server {
      */
     public void decreaseDurability(double wearAmount) {
         this.durability -= wearAmount;
-        if (this.durability < 0) {
-            this.durability = 0; // Para evitar durabilidad negativa si fuera el caso
         }
-    }
 }

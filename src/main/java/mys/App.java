@@ -21,16 +21,7 @@ public class App {
         for (int i = 0; i < NUMBER_OF_SERVERS; i++)
             servers.add(new Server(i, new LinkedList<>()));
 
-        // Engine engine = new Engine(
-        // SIMULATION_LENGTH,
-        // servers,
-        // new EmpiricalDiscrete(new double[] { 10d, 15d, 17d }, new double[] { .35d,
-        // .45d, .2d }),
-        // new EmpiricalDiscrete(new double[] { 8d, 10d, 13d, 15d },
-        // new double[] { .38d, .32d, .1d, .2d }),
-        // new OneServer(),
-        // new Statistics());
-
+        
         Engine engine = new Engine(
                 SIMULATION_LENGTH,
                 servers,
@@ -53,29 +44,36 @@ public class App {
 */
 
 
-/* nueva inicializacion posible para la clase
-package mys;
+// nueva inicializacion posible para la clase
+/*package mys;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import mys.events.Statistics;
-import mys.generators.*;
+import mys.generators.Distribution;
+import mys.generators.EmpiricalDiscrete;
+import mys.generators.LandingAndDescentDistribution;
+import mys.generators.Normal;
+import mys.generators.TimeDependentExponential;
+import mys.generators.Uniform;
 import mys.policies.ManyServer;
 import mys.resources.Server;
 import mys.resources.ServerSelectionPolicy;
+import mys.statistics.TerminalReport;
 
 public class App {
-
+    private static final double SIMULATION_LENGTH = 40320;
+    private static final int NUMBER_OF_SERVERS = 5;
     public static void main(String[] args) {
         
         // 1. Configuración de 4 semanas de simulación en minutos (4 * 7 * 24 * 60)
-        double simulationLength = 40320.0;
+    
 
         // 2. Instanciar los 5 servidores (pistas) con sus colas
         List<Server> servers = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUMBER_OF_SERVERS; i++) {
             servers.add(new Server(i, new LinkedList<>()));
         }
 
@@ -101,7 +99,7 @@ public class App {
 
         // 8. Inyectar todo al Engine
         Engine engine = new Engine(
-                simulationLength,
+                SIMULATION_LENGTH,
                 servers,
                 arrivalBehavior,
                 serviceBehavior,
@@ -112,11 +110,7 @@ public class App {
 
         // Ejecutar simulación
         engine.run();
+        new TerminalReport().report(engine.statistics());
         
-        // Al finalizar, podrías imprimir la durabilidad restante de las pistas
-        for(Server s : servers) {
-            System.out.println("Pista " + s.id() + " - Durabilidad final: " + s.getDurability());
-        }
     }
-}
-*/
+}*/

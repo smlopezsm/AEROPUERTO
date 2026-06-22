@@ -19,12 +19,20 @@ public class EmpiricalDiscrete implements Distribution {
     private final Random random;
 
     public EmpiricalDiscrete(double[] valores, double[] probabilidades) {
+        this(valores, probabilidades, new Random());
+    }
+
+    public EmpiricalDiscrete(double[] valores, double[] probabilidades, long semilla) {
+        this(valores, probabilidades, new Random(semilla));
+    }
+
+    private EmpiricalDiscrete(double[] valores, double[] probabilidades, Random random) {
         if (valores.length != probabilidades.length)
             throw new IllegalArgumentException("Los arrays deben tener el mismo tamaño");
 
         this.valores = valores.clone();
         this.probAcumulada = construirCDF(probabilidades);
-        this.random = new Random();
+        this.random = random;
     }
 
     /**

@@ -3,6 +3,7 @@ package mys.events;
 import java.util.List;
 
 import mys.entities.Entity;
+import mys.generators.Constant;
 import mys.generators.Distribution;
 import mys.generators.TimeDependentExponential;
 import mys.resources.Server;
@@ -19,6 +20,15 @@ public class Arrival implements Event {
     private final Distribution wearDistribution; 
 
     public Arrival(double clock, Entity entity, Distribution arrivalDistribution,
+            Distribution serviceDistribution, ServerSelectionPolicy serverSelectionPolicy) {
+        this.clock = clock;
+        this.entity = entity;
+        this.serverSelectionPolicy = serverSelectionPolicy;
+        this.arrivalDistribution = arrivalDistribution;
+        this.serviceDistribution = serviceDistribution;
+        this.wearDistribution = new Constant(0); // Se asigna una distribución de desgaste nula si no se proporciona
+    }
+    public Arrival(double clock, Entity entity, Distribution arrivalDistribution,
             Distribution serviceDistribution, Distribution wearDistribution,
             ServerSelectionPolicy serverSelectionPolicy) {
         this.clock = clock;
@@ -28,6 +38,7 @@ public class Arrival implements Event {
         this.serviceDistribution = serviceDistribution;
         this.wearDistribution = wearDistribution; // ASIGNACIÓN
     }
+
 
     // Ver si se modifico para varios arribos a la vez
    @Override

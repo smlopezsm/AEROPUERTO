@@ -1,5 +1,6 @@
 package mys.events;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ public class Statistics {
 
     private double maxSystemTime = 0;
     private double maxWaitingTime = 0;
+    private double minSystemTime = Double.POSITIVE_INFINITY;
+    private double minWaitingTime = Double.POSITIVE_INFINITY;
 
     // --- NUEVAS VARIABLES PARA MÍNIMOS (Distintos de cero) ---
     private double minSystemTime = Double.MAX_VALUE;
@@ -28,6 +31,8 @@ public class Statistics {
 
     private int serverIdMaxIdleTime = -1;
     private double maxIdleTime = 0;
+    private double minIdleTime = Double.POSITIVE_INFINITY;
+    private double idleProportion = 0;
 
     private int totalArrivals = 0;
     private int totalDepartures = 0;
@@ -36,6 +41,9 @@ public class Statistics {
     private int totalAbandoned = 0; 
 
     private int maxQueueLength = 0;
+    private int minQueueLength = Integer.MAX_VALUE;
+    private int totalAbandonedEntities = 0;
+    private final List<Double> durationsServers = new ArrayList<>();
 
     public void registerServers(List<Server> servers) {
         for (Server s : servers){
@@ -74,6 +82,55 @@ public class Statistics {
     // =========================================================================
     // MÉTODOS DE REGISTRO
     // =========================================================================
+    public List<Double> servers() {
+        return this.durationsServers;
+    }
+
+    public void durationsServers(double duration) {
+        this.durationsServers.add(duration);
+    }
+    public double totalIdleTime(int serverId) {
+        return this.serverTotalIdleTimes.get(serverId);
+    }
+
+    public double totalSystemTime() {
+        return this.totalSystemTime;
+    }
+
+    public int totalArrivals() {
+        return this.totalArrivals;
+    }
+
+    public int totalDepartures() {
+        return this.totalDepartures;
+    }
+
+    public double maxWaitingTime() {
+        return this.maxWaitingTime;
+    }
+
+    public double minWaitingTime() {
+        return finiteMinimum(this.minWaitingTime);
+    }
+
+    public double maxIdleTime() {
+        return this.maxIdleTime;
+    }
+
+    public double minIdleTime() {
+        return finiteMinimum(this.minIdleTime);
+    }
+
+    public double serverIdMaxIdleTime() {
+        return this.serverIdMaxIdleTime;
+    }
+    public double meanWaitingTime() {
+    return this.meanWaitingTime;
+    }
+
+    public double meanSystemTime() {
+    return this.meanSystemTime;
+   }
 
     /**
      * Alias para el tiempo en el sistema, ya que el PDF lo llama "tiempo de tránsito".
@@ -88,8 +145,8 @@ public class Statistics {
         if (value > this.maxSystemTime) {
             this.maxSystemTime = value;
         }
-        if (value > 0 && value < this.minSystemTime) { // Control distinto de cero
-            this.minSystemTime = value;
+       // if (value > 0 && value < this.minSystemTime) { // Control distinto de cero
+          //  this.minSystemTime = value;
         }
     }
 

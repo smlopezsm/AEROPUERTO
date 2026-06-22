@@ -3,6 +3,7 @@ package mys.events;
 import java.util.List;
 
 import mys.entities.Entity;
+import mys.generators.Constant;
 import mys.generators.Distribution;
 import mys.resources.Server;
 
@@ -14,6 +15,12 @@ public class EndOfService implements Event {
     private final Distribution serviceDistribution;
     private final Distribution wearDistribution; // Se añade la distribución de desgaste
 
+    public EndOfService(double clock, Entity entity, Distribution serviceDistribution) {
+        this.clock = clock;
+        this.entity = entity;
+        this.serviceDistribution = serviceDistribution;
+        this.wearDistribution = new Constant(0); // Se asigna null si no se proporciona desgaste
+    }
     // Constructor actualizado para recibir la distribución de desgaste
     public EndOfService(double clock, Entity entity, Distribution serviceDistribution, Distribution wearDistribution) {
         this.clock = clock;
@@ -27,6 +34,11 @@ public class EndOfService implements Event {
         
         
         Server server = this.entity().server();
+
+        statistics.entityDeparture();
+        statistics.addSystemTime(this.clock - this.entity().arrivalTime());
+
+        
         
         //Marcar las estadísticas de los aterrizajes
 
@@ -69,7 +81,7 @@ public class EndOfService implements Event {
                 nextPlane.server(server);
                 
                 // Registramos el tiempo de espera en las estadísticas antes de que inicie su servicio
-                statistics.addWaitTime(waitTime);
+                statistics.addWaitingTime(waitTime);
                 
                 // Planificamos su fin de servicio
                 fel.insert(new EndOfService(
@@ -83,9 +95,13 @@ public class EndOfService implements Event {
             } else {
                 // El avión expiró. Superó los 120 minutos en la cola y se desvió a otro aeropuerto.
                 // Lo contamos en las estadísticas para tu reporte final.
+            ;
                 statistics.addAbandonedEntity(); 
             }
         }
+        if (!server.isBusy()) {
+    statistics.initIdleTime(server.id(), this.clock);
+}
     }
 
     @Override
