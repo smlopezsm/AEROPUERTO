@@ -1,4 +1,4 @@
-package entities;
+package mys.entities;
 
 import mys.resources.Server;
 

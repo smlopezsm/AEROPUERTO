@@ -36,6 +36,7 @@ public class Statistics {
 
     private int totalArrivals = 0;
     private int totalDepartures = 0;
+    private double idleProportion;
     
     // --- NUEVA VARIABLE PARA ABANDONOS ---
     private int totalAbandoned = 0; 
@@ -99,17 +100,17 @@ public class Statistics {
         return this.maxWaitingTime;
     }
 
-    public double minWaitingTime() {
+   /*  public double minWaitingTime() {
         return finiteMinimum(this.minWaitingTime);
-    }
+    }*/
 
     public double maxIdleTime() {
         return this.maxIdleTime;
     }
 
-    public double minIdleTime() {
+   /*  public double minIdleTime() {
         return finiteMinimum(this.minIdleTime);
-    }
+    }*/
 
     public double serverIdMaxIdleTime() {
         return this.serverIdMaxIdleTime;
@@ -202,6 +203,38 @@ public class Statistics {
             this.minQueueLength = queueLength;
         }
     }
+
+    public double totalIdleTime() {
+    return this.serverTotalIdleTimes.values()
+            .stream()
+            .mapToDouble(Double::doubleValue)
+            .sum();
+}
+
+public double idleProportion() {
+    return this.idleProportion;
+}
+
+public void finishIdleTimes(
+        List<Server> servers,
+        double simulationLength) {
+
+    for (Server server : servers) {
+        if (!server.isBusy()) {
+            addIdleTime(server.id(), simulationLength);
+        }
+    }
+
+    double totalAvailableTime =
+            simulationLength * servers.size();
+
+    this.idleProportion = totalAvailableTime == 0
+            ? 0
+            : totalIdleTime() / totalAvailableTime;
+}
+
+public int totalAbandonedEntities() {
+    return totalAbandoned;}
 
     public void calculate() {
         // Validación para evitar división por cero si ningún avión logró aterrizar

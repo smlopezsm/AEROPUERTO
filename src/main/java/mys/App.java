@@ -1,4 +1,4 @@
-package mys;
+/*package mys;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -35,7 +35,7 @@ public class App {
         new TerminalReport().report(engine.statistics());
 
     }
-}
+}*/
 /*
     Nota sobre la inicialización: 
     Cuando configures tu simulador en tu archivo App.java (o donde instancies el Engine), en 
@@ -45,7 +45,7 @@ public class App {
 
 
 // nueva inicializacion posible para la clase
-/*package mys;
+package mys;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -113,4 +113,4 @@ public class App {
         new TerminalReport().report(engine.statistics());
         
     }
-}*/
+}

@@ -1,4 +1,4 @@
-package mys;
+/*package mys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,3 +163,4 @@ public class StageThreeApp {
     private record ConfidenceInterval(double mean, double lower, double upper) {
     }
 }
+*/
