@@ -25,8 +25,12 @@ public class EndOfService implements Event {
     @Override
     public void planificate(FutureEventList fel, List<Server> servers, Statistics statistics) {
         
+        
         Server server = this.entity().server();
         
+        //Marcar las estadísticas de los aterrizajes
+
+
         // --- Registro de Estadísticas de la Entidad que finaliza ---
         // Aquí puedes calcular el tiempo de tránsito (tiempo total en el sistema)
         // del avión que acaba de aterrizar y reportarlo a statistics.
@@ -43,6 +47,12 @@ public class EndOfService implements Event {
         // =================================================================
         // LÓGICA DE LÍMITE DE ESPERA (2 HORAS = 120 MINUTOS)
         // =================================================================
+        // Preguntarle al dani, si esta bien esta configuracion
+
+        /*
+            Postulacion, che no te podemos atender en 2 horas, te vas a quedar sin nafta y te vas a cagar muriendo 
+            andate a otro aeropuerto.
+        */
         boolean planeAssigned = false;
 
         // Recorremos la cola hasta encontrar un avión válido o vaciarla

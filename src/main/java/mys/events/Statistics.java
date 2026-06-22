@@ -20,100 +20,96 @@ public class Statistics {
     private double maxSystemTime = 0;
     private double maxWaitingTime = 0;
 
+    // --- NUEVAS VARIABLES PARA MÍNIMOS (Distintos de cero) ---
+    private double minSystemTime = Double.MAX_VALUE;
+    private double minWaitingTime = Double.MAX_VALUE;
+    private double minIdleTime = Double.MAX_VALUE;
+    private int minQueueLength = Integer.MAX_VALUE;
+
     private int serverIdMaxIdleTime = -1;
     private double maxIdleTime = 0;
 
     private int totalArrivals = 0;
     private int totalDepartures = 0;
+    
+    // --- NUEVA VARIABLE PARA ABANDONOS ---
+    private int totalAbandoned = 0; 
 
     private int maxQueueLength = 0;
 
     public void registerServers(List<Server> servers) {
         for (Server s : servers){
             this.serverTotalIdleTimes.put(s.id(), 0d);
-            this.serverInitIdleTimes.put(s.id(), 0d);}
+            this.serverInitIdleTimes.put(s.id(), 0d);
+        }
     }
 
-    public double totalWaitingTime() {
-        return this.totalWaitingTime;
-    }
+    // =========================================================================
+    // GETTERS
+    // =========================================================================
+    
+    public double totalWaitingTime() { return this.totalWaitingTime; }
+    public double totalIdleTime(int serverId) { return this.serverTotalIdleTimes.get(serverId); }
+    public double totalSystemTime() { return this.totalSystemTime; }
+    public int totalArrivals() { return this.totalArrivals; }
+    public int totalDepartures() { return this.totalDepartures; }
+    
+    public double maxWaitingTime() { return this.maxWaitingTime; }
+    public double maxIdleTime() { return this.maxIdleTime; }
+    public double maxSystemTime() { return this.maxSystemTime; }
+    public int maxQueueLength() { return this.maxQueueLength; }
+    public double serverIdMaxIdleTime() { return this.serverIdMaxIdleTime; }
+    
+    public double meanWaitingTime() { return this.meanWaitingTime; }
+    public double meanSystemTime() { return this.meanSystemTime; }
 
-    public double totalIdleTime(int serverId) {
-        return this.serverTotalIdleTimes.get(serverId);
-    }
+    // Nuevos getters para mínimos (Si no se modificaron, devuelven 0 en lugar de MAX_VALUE)
+    public double minSystemTime() { return this.minSystemTime == Double.MAX_VALUE ? 0 : this.minSystemTime; }
+    public double minWaitingTime() { return this.minWaitingTime == Double.MAX_VALUE ? 0 : this.minWaitingTime; }
+    public double minIdleTime() { return this.minIdleTime == Double.MAX_VALUE ? 0 : this.minIdleTime; }
+    public int minQueueLength() { return this.minQueueLength == Integer.MAX_VALUE ? 0 : this.minQueueLength; }
+    
+    public int totalAbandoned() { return this.totalAbandoned; }
 
-    public double totalSystemTime() {
-        return this.totalSystemTime;
-    }
-
-    public int totalArrivals() {
-        return this.totalArrivals;
-    }
-
-    public int totalDepartures() {
-        return this.totalDepartures;
-    }
-
-    public double maxWaitingTime() {
-        return this.maxWaitingTime;
-    }
-
-    public double maxIdleTime() {
-        return this.maxIdleTime;
-    }
-
-    public double serverIdMaxIdleTime() {
-        return this.serverIdMaxIdleTime;
-    }
-    public double meanWaitingTime() {
-    return this.meanWaitingTime;
-    }
-
-    public double meanSystemTime() {
-    return this.meanSystemTime;
-   }
+    // =========================================================================
+    // MÉTODOS DE REGISTRO
+    // =========================================================================
 
     /**
-     * 
-     * @return the max system time registered
+     * Alias para el tiempo en el sistema, ya que el PDF lo llama "tiempo de tránsito".
      */
-    public double maxSystemTime() {
-        return this.maxSystemTime;
+    public void addTransitTime(double value) {
+        this.addSystemTime(value);
     }
 
-    /**
-     * 
-     * @return the max queue lenght registered
-     */
-    public int maxQueueLength() {
-        return this.maxQueueLength;
-    }
-
-    /**
-     * add the system time of an entity to the total system time, and check if it's
-     * greater than the max system time
-     * 
-     * @param value the system time of an entity
-     */
     public void addSystemTime(double value) {
-
         this.totalSystemTime += value;
 
-        if (value > this.maxSystemTime)
+        if (value > this.maxSystemTime) {
             this.maxSystemTime = value;
+        }
+        if (value > 0 && value < this.minSystemTime) { // Control distinto de cero
+            this.minSystemTime = value;
+        }
     }
 
     /**
-     * add the waiting time of an entity to the total waiting time, and check if
-     * it's greater than the max waiting time
-     * 
-     * @param value the waiting time of an entity
+     * Renombrado a addWaitTime para enlazar correctamente con EndOfService
      */
-    public void addWaitingTime(double value) {
+    public void addWaitTime(double value) {
         this.totalWaitingTime += value;
 
-        if (value > this.maxWaitingTime)
+        if (value > this.maxWaitingTime) {
             this.maxWaitingTime = value;
+        }
+        if (value > 0 && value < this.minWaitingTime) { // Control distinto de cero
+            this.minWaitingTime = value;
+        }
+    }
+
+    // Mantenemos el nombre original por si lo usabas en otras partes de tu código
+    public void addWaitingTime(double value) {
+        this.addWaitTime(value);
     }
 
     public void addIdleTime(int id, double clock) {
@@ -126,6 +122,9 @@ public class Statistics {
         if (idleTime > this.maxIdleTime) {
             this.maxIdleTime = idleTime;
             this.serverIdMaxIdleTime = id;
+        }
+        if (idleTime > 0 && idleTime < this.minIdleTime) { // Control distinto de cero
+            this.minIdleTime = idleTime;
         }
     }
 
@@ -141,14 +140,27 @@ public class Statistics {
         this.totalDepartures++;
     }
 
-    public void registerQueueLength(int queueLength) {
-    if (queueLength > this.maxQueueLength) {
-        this.maxQueueLength = queueLength;
+    /**
+     * Registra un avión que abandonó la cola por exceder las 2 horas de espera
+     */
+    public void addAbandonedEntity() {
+        this.totalAbandoned++;
     }
+
+    public void registerQueueLength(int queueLength) {
+        if (queueLength > this.maxQueueLength) {
+            this.maxQueueLength = queueLength;
+        }
+        if (queueLength > 0 && queueLength < this.minQueueLength) { // Control distinto de cero
+            this.minQueueLength = queueLength;
+        }
     }
 
     public void calculate() {
-        this.meanWaitingTime = this.totalWaitingTime/this.totalDepartures;
-        this.meanSystemTime = this.totalSystemTime/this.totalDepartures;
+        // Validación para evitar división por cero si ningún avión logró aterrizar
+        if (this.totalDepartures > 0) {
+            this.meanWaitingTime = this.totalWaitingTime / this.totalDepartures;
+            this.meanSystemTime = this.totalSystemTime / this.totalDepartures;
+        }
     }
 }

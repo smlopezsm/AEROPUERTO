@@ -30,7 +30,7 @@ public class Arrival implements Event {
     }
 
     // Ver si se modifico para varios arribos a la vez
-    @Override
+   @Override
     public void planificate(FutureEventList fel, List<Server> servers, Statistics statistics) {
 
         Server server = this.serverSelectionPolicy.selectServer(servers);
@@ -47,9 +47,10 @@ public class Arrival implements Event {
 
             fel.insert(
                     new EndOfService(
-                            this.clock + this.serviceDistribution.sample(),
+                            this.clock + this.serviceDistribution.sample(), //Formula del descenso de los pasjeros, clock+tabla2+uniforme
                             this.entity(),
-                            this.serviceDistribution));
+                            this.serviceDistribution,
+                            this.wearDistribution)); // Asegurate de pasar la wearDistribution acá
         }
 
         // --- CÓDIGO NUEVO AGREGADO --- 
@@ -72,7 +73,6 @@ public class Arrival implements Event {
 
         statistics.entityArrived();
     }
-
     @Override
     public double clock() {
         return this.clock;

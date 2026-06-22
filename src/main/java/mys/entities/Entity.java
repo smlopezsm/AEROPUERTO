@@ -3,8 +3,12 @@ import mys.resources.Server;
 
 public class Entity {
 
-    private int id;
-    private double arrivalTime;
+    // Se agrega 'final' porque la identidad y la hora de llegada 
+    // de un avión no cambian nunca una vez que el avión fue creado.
+    private final int id;
+    private final double arrivalTime;
+    
+    // Este NO es final porque el avión entra y sale de los servidores
     private Server server;
 
     public Entity(int id, double arrivalTime) {
@@ -27,6 +31,8 @@ public class Entity {
     public void server(Server server) {
         this.server = server;
     }
-
-
+    @Override
+    public String toString() {
+        return String.format("Aeronave[ID: %d, Llegada: %.2f]", this.id, this.arrivalTime);
+    }
 }
