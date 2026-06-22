@@ -20,19 +20,19 @@ public class Statistics {
 
     private double maxSystemTime = 0;
     private double maxWaitingTime = 0;
-    private double minSystemTime = Double.POSITIVE_INFINITY;
-    private double minWaitingTime = Double.POSITIVE_INFINITY;
+    //private double minSystemTime = Double.POSITIVE_INFINITY;
+    //private double minWaitingTime = Double.POSITIVE_INFINITY;
 
     // --- NUEVAS VARIABLES PARA MÍNIMOS (Distintos de cero) ---
     private double minSystemTime = Double.MAX_VALUE;
     private double minWaitingTime = Double.MAX_VALUE;
-    private double minIdleTime = Double.MAX_VALUE;
-    private int minQueueLength = Integer.MAX_VALUE;
+    //private double minIdleTime = Double.MAX_VALUE;
+    //private int minQueueLength = Integer.MAX_VALUE;
 
     private int serverIdMaxIdleTime = -1;
     private double maxIdleTime = 0;
     private double minIdleTime = Double.POSITIVE_INFINITY;
-    private double idleProportion = 0;
+    //private double idleProportion = 0;
 
     private int totalArrivals = 0;
     private int totalDepartures = 0;
@@ -42,7 +42,7 @@ public class Statistics {
 
     private int maxQueueLength = 0;
     private int minQueueLength = Integer.MAX_VALUE;
-    private int totalAbandonedEntities = 0;
+    //private int totalAbandonedEntities = 0;
     private final List<Double> durationsServers = new ArrayList<>();
 
     public void registerServers(List<Server> servers) {
@@ -57,24 +57,14 @@ public class Statistics {
     // =========================================================================
     
     public double totalWaitingTime() { return this.totalWaitingTime; }
-    public double totalIdleTime(int serverId) { return this.serverTotalIdleTimes.get(serverId); }
-    public double totalSystemTime() { return this.totalSystemTime; }
-    public int totalArrivals() { return this.totalArrivals; }
-    public int totalDepartures() { return this.totalDepartures; }
     
-    public double maxWaitingTime() { return this.maxWaitingTime; }
-    public double maxIdleTime() { return this.maxIdleTime; }
     public double maxSystemTime() { return this.maxSystemTime; }
     public int maxQueueLength() { return this.maxQueueLength; }
-    public double serverIdMaxIdleTime() { return this.serverIdMaxIdleTime; }
-    
-    public double meanWaitingTime() { return this.meanWaitingTime; }
-    public double meanSystemTime() { return this.meanSystemTime; }
 
     // Nuevos getters para mínimos (Si no se modificaron, devuelven 0 en lugar de MAX_VALUE)
     public double minSystemTime() { return this.minSystemTime == Double.MAX_VALUE ? 0 : this.minSystemTime; }
-    public double minWaitingTime() { return this.minWaitingTime == Double.MAX_VALUE ? 0 : this.minWaitingTime; }
-    public double minIdleTime() { return this.minIdleTime == Double.MAX_VALUE ? 0 : this.minIdleTime; }
+    //public double minWaitingTime() { return this.minWaitingTime == Double.MAX_VALUE ? 0 : this.minWaitingTime; }
+    //public double minIdleTime() { return this.minIdleTime == Double.MAX_VALUE ? 0 : this.minIdleTime; }
     public int minQueueLength() { return this.minQueueLength == Integer.MAX_VALUE ? 0 : this.minQueueLength; }
     
     public int totalAbandoned() { return this.totalAbandoned; }
@@ -147,7 +137,7 @@ public class Statistics {
         }
        // if (value > 0 && value < this.minSystemTime) { // Control distinto de cero
           //  this.minSystemTime = value;
-        }
+        //}
     }
 
     /**

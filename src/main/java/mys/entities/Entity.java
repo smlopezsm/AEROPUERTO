@@ -1,10 +1,10 @@
-package mys.entities;
+package entities;
+
 import mys.resources.Server;
 
 public class Entity {
 
-    // Se agrega 'final' porque la identidad y la hora de llegada 
-    // de un avión no cambian nunca una vez que el avión fue creado.
+    //se agrega 'final' porque la identidad y la hora de llegada de un avión no cambian nunca una vez que el avión fue creado.
     private final int id;
     private final double arrivalTime;
     
