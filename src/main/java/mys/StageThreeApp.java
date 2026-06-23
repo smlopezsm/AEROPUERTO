@@ -1,4 +1,4 @@
-/*package mys;
+package mys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +16,10 @@ import mys.generators.TimeDependentExponential;
 import mys.generators.Uniform;
 import mys.policies.BalancedServer;
 import mys.resources.Server;
+
+/*
+en esta etapa se pide implementar una politica de seleccion de pista balanceada por durabilidad, es decir, que seleccione la pista con mayor durabilidad restante. Para esto, se debe modificar el metodo de seleccion de servidor en el motor de simulacion para que tenga en cuenta la durabilidad de cada pista al momento de asignar una aeronave a una pista disponible. Ademas, se deben registrar las durabilidades finales de cada pista al finalizar la simulacion para poder analizarlas posteriormente.
+*/
 
 public class StageThreeApp {
 
@@ -37,12 +41,19 @@ public class StageThreeApp {
     }
 
     private static Statistics runReplication(int replication) {
+        /*
+            @param replication: el número de réplica actual (0 a 49)
+            @return un objeto Statistics con los resultados de la réplica
+        */
         long seed = BASE_SEED + replication * 100L;
+
+        //crear los servidores, las distribuciones y las estadísticas
         List<Server> servers = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_SERVERS; i++) {
             servers.add(new Server(i, new LinkedList<>()));
         }
 
+        //inicializa las distribucions con semillas distintas para cada replica
         Distribution arrivals = new TimeDependentExponential(15, 9, seed + 1);
         Distribution landing = new EmpiricalDiscrete(
                 new double[] {8, 10, 13, 15},
@@ -63,7 +74,7 @@ public class StageThreeApp {
                 new BalancedServer(),
                 statistics);
         engine.run();
-        return statistics;
+        return statistics; 
     }
 
     private static Map<String, double[]> createResultTable() {
@@ -132,7 +143,7 @@ public class StageThreeApp {
         System.out.println("Configuracion: 6 pistas, seleccion balanceada por durabilidad");
         System.out.println("Replicas independientes: 50");
         System.out.println("Duracion por replica: 40320 minutos");
-        System.out.println("Nivel de confianza: 95% (t de Student, 49 grados de libertad)");
+        System.out.println("Nivel de confianza: 95% ");
         System.out.println();
         System.out.printf("%-34s %12s %15s %15s%n", "Metrica", "Media", "IC95 inferior", "IC95 superior");
 
@@ -155,6 +166,7 @@ public class StageThreeApp {
             squaredDifferences += difference * difference;
         }
 
+        //usamos n-1 para la varianza muestral
         double standardDeviation = Math.sqrt(squaredDifferences / (values.length - 1));
         double margin = T_CRITICAL_95_DF_49 * standardDeviation / Math.sqrt(values.length);
         return new ConfidenceInterval(mean, mean - margin, mean + margin);
@@ -163,4 +175,4 @@ public class StageThreeApp {
     private record ConfidenceInterval(double mean, double lower, double upper) {
     }
 }
-*/
+ 

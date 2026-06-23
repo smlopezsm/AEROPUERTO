@@ -68,47 +68,47 @@ public class App {
     private static final int NUMBER_OF_SERVERS = 5;
     public static void main(String[] args) {
         
-        // 1. Configuración de 4 semanas de simulación en minutos (4 * 7 * 24 * 60)
+        //1. configuracion de 4 semanas de simulacion en minutos (4 * 7 * 24 * 60)
     
 
-        // 2. Instanciar los 5 servidores (pistas) con sus colas
+        //2. instanciar los 5 servidores (pistas) con sus colas
         List<Server> servers = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_SERVERS; i++) {
             servers.add(new Server(i, new LinkedList<>()));
         }
 
-        // 3. Distribución de Arribos: Dependiente del tiempo (Normal 15, Pico 9)
+        //3. distribucion de arribos: dependiente del tiempo (normal 15, pico 9)
         Distribution arrivalBehavior = new TimeDependentExponential(15.0, 9.0);
 
-        // 4. Distribución de Servicio: Aterrizaje (Tabla 2) + Descenso (Uniforme)
+        //4. distribucion de servicio: aterrizaje (tabla 2) + descenso (uniforme)
         double[] landingValues = {8.0, 10.0, 13.0, 15.0};
         double[] landingProbs = {0.38, 0.32, 0.10, 0.20};
-        Distribution aterrizajeEmpirica = new EmpiricalDiscrete(landingValues, landingProbs); // Ajusta según el constructor de tu clase
+        Distribution aterrizajeEmpirica = new EmpiricalDiscrete(landingValues, landingProbs); //ajusta segun el constructor de la clase
         Distribution descensoUniforme = new Uniform(10.0, 25.0);
         
         Distribution serviceBehavior = new LandingAndDescentDistribution(aterrizajeEmpirica, descensoUniforme);
 
-        // 5. Distribución de Desgaste: Normal(μ=5, σ=1), truncada a positivos
+        //5. distribucion de desgaste: normal(μ=5, σ=1), truncada a positivos
         Distribution wearBehavior = new Normal(5.0, 1.0, true);
 
-        // 6. Política de servidores: Multiserver (cola más corta)
+        //6. politica de servidores: multiserver (cola mas corta)
         ServerSelectionPolicy serverSelectionPolicy = new ManyServer();
 
-        // 7. Estadísticas
+        //7. estadisticas
         Statistics statistics = new Statistics();
 
-        // 8. Inyectar todo al Engine
+        //8. inyectar todo al engine
         Engine engine = new Engine(
                 SIMULATION_LENGTH,
                 servers,
                 arrivalBehavior,
                 serviceBehavior,
-                wearBehavior, // Inyectamos el comportamiento de desgaste
+                wearBehavior, //inyectamos el comportamiento de desgaste
                 serverSelectionPolicy,
                 statistics
         );
 
-        // Ejecutar simulación
+        //ejecutar simulacion
         engine.run();
         new TerminalReport().report(engine.statistics());
         

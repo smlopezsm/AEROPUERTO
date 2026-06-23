@@ -50,7 +50,7 @@ public class Engine {
         this.statistics.registerServers(servers);
         this.fel = new FutureEventList();
 
-        // Se inyecta la distribución de desgaste al primer arribo
+        //se inyecta la distribucion de desgaste al primer arribo
         this.fel.insert(
                 new Arrival(0, new Entity(0, 0), arrivalBehavior, serviceBehavior, wearBehavior, serverSelectionPolicy));
     }
@@ -77,24 +77,24 @@ public class Engine {
     }
 }
 
-/*Configuracion para la duracion del evento en 
+/*configuracion para la duracion del evento en 
 el sistema dependiendo de la tabla 2 y de la distribucion uniforma
 */
 
 /*
-// 1. Creás las distribuciones base
-Distribution aterrizajeEmpirica = new EmpiricalDiscrete(...); // Tu tabla 2
-Distribution descensoUniforme = new Uniform(10, 25); // El descenso del PDF
+//1. se crean las distribuciones base
+Distribution aterrizajeEmpirica = new EmpiricalDiscrete(...); //tabla 2
+Distribution descensoUniforme = new Uniform(10, 25); //el descenso
 
-// 2. Creás la distribución combinada que representa el tiempo total en el sistema
+//2. se crea la distribucion combinada que representa el tiempo total en el sistema
 Distribution tiempoServicioTotal = new LandingAndDescentDistribution(aterrizajeEmpirica, descensoUniforme);
 
-// 3. Se la pasás al Engine como el comportamiento del servicio (serviceBehavior)
+//3. se le pasa al engine como el comportamiento del servicio (serviceBehavior)
 Engine engine = new Engine(
     simulationLength,
     servers,
-    arribosTiempoDependiente, // El que hicimos antes para horarios pico
-    tiempoServicioTotal,      // <--- ¡Acá entra tu nueva clase!
+    arribosTiempoDependiente, //el que hicimos antes para horarios pico
+    tiempoServicioTotal,      // <---aca entra la nueva clase
     serverSelectionPolicy,
     statistics
 );
@@ -126,7 +126,7 @@ public class Engine {
             List<Server> servers,
             Distribution arrivalBehavior,
             Distribution serviceBehavior,
-            Distribution wearBehavior, // NUEVO PARÁMETRO
+            Distribution wearBehavior, //el nuevo parametro
             ServerSelectionPolicy serverSelectionPolicy,
             Statistics statistics) {
 
@@ -136,7 +136,7 @@ public class Engine {
         this.statistics.registerServers(servers);
         this.fel = new FutureEventList();
 
-        // Se inyecta la distribución de desgaste al primer arribo
+        //se inyecta la distribucion de desgaste al primer arribo
         this.fel.insert(
                 new Arrival(0, new Entity(0, 0), arrivalBehavior, serviceBehavior, wearBehavior, serverSelectionPolicy));
     }

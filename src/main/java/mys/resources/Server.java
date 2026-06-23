@@ -15,7 +15,7 @@ public class Server {
         this.id = id;
         this.queue = queue;
         this.entity = null;
-        this.durability = 3000.0; // Valor inicial definido en el modelo
+        this.durability = 3000.0; //valor inicial definido en el modelo
     }
 
     /**

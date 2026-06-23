@@ -15,7 +15,7 @@ public class Uniform implements Distribution {
         this.random = new Random();
     }
 
-    /** Constructor con semilla (útil para pruebas reproducibles). */
+    /**constructor con semilla (es util para las pruebas reproducibles). */
     public Uniform(double min, double max, long semilla) {
         this(min, max);
         this.random.setSeed(semilla);
@@ -24,7 +24,7 @@ public class Uniform implements Distribution {
     @Override
     public double sample() {
         //U(a,b) = a + (b - a) * U(0,1)
-        return min + (max - min) * random.nextDouble(); // x = a + (b-a) * r
+        return min + (max - min) * random.nextDouble(); //x = a + (b-a) * r
     }
 
     @Override

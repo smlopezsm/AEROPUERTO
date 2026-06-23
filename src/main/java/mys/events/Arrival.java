@@ -26,7 +26,7 @@ public class Arrival implements Event {
         this.serverSelectionPolicy = serverSelectionPolicy;
         this.arrivalDistribution = arrivalDistribution;
         this.serviceDistribution = serviceDistribution;
-        this.wearDistribution = new Constant(0); // Se asigna una distribución de desgaste nula si no se proporciona
+        this.wearDistribution = new Constant(0); //se asigna una distribucion de desgaste nula si no se proporciona
     }
     public Arrival(double clock, Entity entity, Distribution arrivalDistribution,
             Distribution serviceDistribution, Distribution wearDistribution,
@@ -36,11 +36,11 @@ public class Arrival implements Event {
         this.serverSelectionPolicy = serverSelectionPolicy;
         this.arrivalDistribution = arrivalDistribution;
         this.serviceDistribution = serviceDistribution;
-        this.wearDistribution = wearDistribution; // ASIGNACIÓN
+        this.wearDistribution = wearDistribution; //asignacion
     }
 
 
-    // Ver si se modifico para varios arribos a la vez
+    //ver si se modifico para varios arribos a la vez
    @Override
     public void planificate(FutureEventList fel, List<Server> servers, Statistics statistics) {
 
@@ -58,19 +58,17 @@ public class Arrival implements Event {
 
             fel.insert(
                     new EndOfService(
-                            this.clock + this.serviceDistribution.sample(), //Formula del descenso de los pasjeros, clock+tabla2+uniforme
+                            this.clock + this.serviceDistribution.sample(), //formula del descenso de los pasjeros, clock+tabla2+uniforme
                             this.entity(),
                             this.serviceDistribution,
-                            this.wearDistribution)); // Asegurate de pasar la wearDistribution acá
+                            this.wearDistribution)); //asegurarse d pasar la wearDistribution aca
         }
 
-        // --- CÓDIGO NUEVO AGREGADO --- 
-        // Define como responde el trafico a las distribuciones exponenciales Etapa 2
-        // Inyectamos el reloj actual si la distribución es dependiente del tiempo
+        //define como responde el trafico a las distribuciones exponenciales etapa 2
+        //inyectamos el reloj actual si la distribucion es dependiente del tiempo
         if (this.arrivalDistribution instanceof TimeDependentExponential) {
             ((TimeDependentExponential) this.arrivalDistribution).setClock(this.clock);
         }
-        // ------------------------------
 
         double nextArrivalTime = this.clock + this.arrivalDistribution.sample();
         
@@ -79,7 +77,7 @@ public class Arrival implements Event {
                         new Entity(this.entity().id() + 1, nextArrivalTime),
                         this.arrivalDistribution,
                         this.serviceDistribution,
-                        this.wearDistribution, // SE ENVÍA AL PRÓXIMO ARRIBO
+                        this.wearDistribution, //se envia al prox arribo
                         this.serverSelectionPolicy));
 
         statistics.entityArrived();

@@ -4,11 +4,11 @@ import mys.resources.Server;
 
 public class Entity {
 
-    //se agrega 'final' porque la identidad y la hora de llegada de un avión no cambian nunca una vez que el avión fue creado.
+    //se agrega final pq la identidad y la hora de llegada de un avion no cambian nunca una vez que el avion fue creado
     private final int id;
     private final double arrivalTime;
     
-    // Este NO es final porque el avión entra y sale de los servidores
+    //este no es final pq el avion entra y sale de los servidores
     private Server server;
 
     public Entity(int id, double arrivalTime) {

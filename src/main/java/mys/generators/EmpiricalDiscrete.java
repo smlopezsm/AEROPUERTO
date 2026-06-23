@@ -15,7 +15,7 @@ import java.util.Random;
 public class EmpiricalDiscrete implements Distribution {
 
     private final double[] valores;
-    private final double[] probAcumulada;  // tabla CDF
+    private final double[] probAcumulada;  // Tabla CDF
     private final Random random;
 
     public EmpiricalDiscrete(double[] valores, double[] probabilidades) {

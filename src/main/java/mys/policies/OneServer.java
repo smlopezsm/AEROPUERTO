@@ -10,6 +10,6 @@ public class OneServer implements ServerSelectionPolicy {
         return servers.get(0);
     }
 
-    //Hacer la politica para varios servidores
+    //hacer la politica para varios servidores
     
 }
